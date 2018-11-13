@@ -3,13 +3,13 @@ EZWinBan builds on and automates [Nathan Studebaker's](https://blog.watchpointda
 
 My driver behind enhancing this script (and building an easy to use installer with [InnoSetup](http://www.jrsoftware.org/isinfo.php)) was preventing AD account lockouts (EventCode 4740) due to brute force or purposeful denial of service attacks against known AD accounts. It has proven to be quite effective for this task.
 
-EZWinBan is a Powershell script that is triggered via Scheduled Task. It parses events (code 4740) from the Windows "Security" log every 5 minutes, extracts the IP address from each event, counts the number of login failures from each IP, notes any that are over the threshold, checks IPs against the whitelist, and adds offending IP addresses to the scope of a Windows firewall rule. History and expiry is maintained in text files; once daily, IPs whose bans have expired are removed (based on the contents of the historical text files).
+EZWinBan is a Powershell script that is triggered via Scheduled Task. It parses events (code 4625) from the Windows "Security" log every 5 minutes, extracts the IP address from each event, counts the number of login failures from each IP, notes any that are over the threshold, checks IPs against the whitelist, and adds offending IP addresses to the scope of a Windows firewall rule. History and expiry is maintained in text files; once daily, IPs whose bans have expired are removed (based on the contents of the historical text files).
 
 
 ## Features
 * Easy to get started - run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/1.0.0/EZWinBan-Install.exe) and begin banning problematic IPs in seconds
 * Works on Windows Server 2008+
-* Automatically ban IPs that repeatedly fail to login to various Microsoft services (anything that logs EventCode 4740 to the "Security" log upon login failure) - examples include: IIS virtual SMTP server, Remote Desktop Services (RDS/RDP), SMB/CIFS, Active Directory Federation Services (ADFS), etc.
+* Automatically ban IPs that repeatedly fail to login to various Microsoft services (anything that logs EventCode 4625 to the "Security" log upon login failure) - examples include: IIS virtual SMTP server, Remote Desktop Services (RDS/RDP), SMB/CIFS, etc.
 * Configurable settings: ban time (how long IPs remain banned), number of authentication failures resulting in a ban
 * Ability to whitelist IPs and/or subnets
 * Tiny foot print - less than 1 MB installed

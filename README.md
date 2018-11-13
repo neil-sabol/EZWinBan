@@ -1,5 +1,5 @@
 # EZWinBan
-EZWinBan builds on and automates Nathan Studebaker's brute force attack detection and blacklisting on Windows Server with powershell script. See: https://blog.watchpointdata.com/rdp-brute-force-attack-detection-and-blacklisting-with-powershell. Like Fail2Ban or DenyHosts, but for Microsoft Windows.
+EZWinBan builds on and automates [Nathan Studebaker's](https://blog.watchpointdata.com/author/nathan-studebaker) brute force attack detection and blacklisting on Windows Server with powershell script. See: https://blog.watchpointdata.com/rdp-brute-force-attack-detection-and-blacklisting-with-powershell. Like Fail2Ban or DenyHosts, but for Microsoft Windows.
 
 My driver behind enhancing this script (and building an easy to use installer with InnoSetup) was preventing AD account lockouts (EventCode 4740) due to brute force or purposeful denial of service attacks against known AD accounts. It has proven to be quite effective for this task.
 

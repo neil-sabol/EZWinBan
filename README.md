@@ -19,11 +19,11 @@ EZWinBan is a Powershell script that is triggered via Scheduled Task. It parses 
 ## Usage
 * Download and run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/1.0.0/EZWinBan-Install.exe) - this creates a EZWinBan folder in %programfiles%, a firewall rule that EZWinBan will manipulate, and a Scheduled Task that runs EZWinBan (process.ps1).
 
-That is basically it for basic usage. I highly recommend reviewing the following to fine tune EZWinBan though.
+**That is basically it for basic usage. I highly recommend reviewing the following to fine tune EZWinBan though.**
 
 * Additional configuration is possible using the files in %programfiles%\EZWinBan\config
-   * settings.ini: Configure how long IPs remain banned AND how many failed login attempts trigger a ban
-   * whitelist.txt: Add IP addresses and/or subnets that should never be banned - see comments in the file for formatting
+     * settings.ini: Configure how long IPs remain banned AND how many failed login attempts trigger a ban
+     * whitelist.txt: Add IP addresses and/or subnets that should never be banned - see comments in the file for formatting
    
 * EZWinBan runs every 5 minutes by default (via Scheduled Task) - wait ~5 minutes and check %programfiles%\EZWinBan\work and you should see a "work file" created and named after the current date. That indicates that EZWinBan is being executed properly. If you open Windows Firewall and access the rule called "EZWinBan," you should see IP addresses under the Scope tab that match those written to the work file.
 

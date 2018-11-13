@@ -1,0 +1,5 @@
+# DO NOT delete the first 4 (comment) lines from this ini file - Neil is using a suboptimal way to parse it!
+# Add IPs or subnets (one per line) to this file that EZWinBan should never block. Format is like TCP wrapper.
+# Example (single IP): 10.10.10.10/255.255.255.255
+# Example (subnet): 10.10.10.0/255.255.255.0
+127.0.0.1/255.255.255.255

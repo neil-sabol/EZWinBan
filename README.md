@@ -16,20 +16,21 @@ EZWinBan is a Powershell script that is triggered via Scheduled Task. It parses 
 * Simple solution - easy to understand and customize (based on built-in Windows components like PowerShell, Windows Firewall, and Task Scheduler)
 
 
-## Usage
+## Usage (basic)
 * Download and run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/1.0.0/EZWinBan-Install.exe) - this creates a EZWinBan folder in %programfiles%, a firewall rule that EZWinBan will manipulate, and a Scheduled Task that runs EZWinBan (process.ps1).
 
-**That is basically it for basic usage. I highly recommend reviewing the following to fine tune EZWinBan though.**
-
+## Usage (advanced)
 * Additional configuration is possible using the files in %programfiles%\EZWinBan\config
      * settings.ini: Configure how long IPs remain banned AND how many failed login attempts trigger a ban
      * whitelist.txt: Add IP addresses and/or subnets that should never be banned - see comments in the file for formatting
    
 * EZWinBan runs every 5 minutes by default (via Scheduled Task) - wait ~5 minutes and check %programfiles%\EZWinBan\work and you should see a "work file" created and named after the current date. That indicates that EZWinBan is being executed properly. If you open Windows Firewall and access the rule called "EZWinBan," you should see IP addresses under the Scope tab that match those written to the work file.
 
-* To remove EZWinBan, simply uninstall it from Apps or Programs and Features
+* To remove EZWinBan, simply uninstall it from Apps or Programs and Features.
 
 * You can customize/rebuild the EZWinBan installer as needed using [Inno Setup](http://www.jrsoftware.org/) and the included .iss file.
+
+* It is advisable to disable NTLM on your Windows servers as well (assuming you are not using it) - see [Network Security: Restrict NTLM: Incoming NTLM Traffic](https://docs.microsoft.com/en-us/previous-versions/windows/it-pro/windows-server-2008-R2-and-2008/jj852167(v=ws.10))
 
 
 ## Acknowledgements

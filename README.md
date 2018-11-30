@@ -1,11 +1,11 @@
 # EZWinBan
 EZWinBan builds on and automates [Nathan Studebaker's](https://blog.watchpointdata.com/author/nathan-studebaker) brute force attack detection and blacklisting on Windows Server with powershell script. See: https://blog.watchpointdata.com/rdp-brute-force-attack-detection-and-blacklisting-with-powershell. Like Fail2Ban or DenyHosts, but for Microsoft Windows.
 
-Note, if you are looking for a more mature and robust approach to IP banning on Windows, [IPBan](https://github.com/DigitalRuby/IPBan) is worth a look.
-
 My driver behind enhancing this script (and building an easy to use installer with [InnoSetup](http://www.jrsoftware.org/isinfo.php)) was preventing AD account lockouts (EventCode 4740) due to brute force or purposeful denial of service attacks against known AD accounts. It has proven to be quite effective for this task.
 
 EZWinBan is a Powershell script that is triggered via Scheduled Task. It parses events (code 4625) from the Windows "Security" log every 1 minute, extracts the IP address from each event, counts the number of login failures from each IP, notes any that are over the threshold, checks IPs against the whitelist, and adds offending IP addresses to the scope of a Windows firewall rule. History and expiry is maintained in text files; once daily, IPs whose bans have expired are removed (based on the contents of the historical text files).
+
+Although EZWinBan is awesome, if you are looking for a more mature and robust approach to IP banning on Windows, [IPBan](https://github.com/DigitalRuby/IPBan) is worth a look.
 
 
 ## Features

@@ -1,8 +1,8 @@
 [Setup]
 AppName = EZWinBan
-AppVerName = EZWinBan 1.0
+AppVerName = EZWinBan 1.1
 AppPublisher = Neil Sabol and others
-AppVersion = 1.0
+AppVersion = 1.1
 DefaultDirName = {pf}\EZWinBan
 ; Place the generated installer on the current user's desktop
 OutputDir=userdocs:..\Desktop
@@ -12,7 +12,7 @@ DisableProgramGroupPage=yes
 Compression = lzma
 SolidCompression = yes
 ; I am referencing %programfiles% throughout (in the powershell script and scheduled task.
-; This ensures %programfiles% point to the "real" folder (not x86) on 64-bit systems.
+; This ensures %programfiles% points to the "real" folder (not x86) on 64-bit systems.
 ArchitecturesInstallIn64BitMode=x64
 PrivilegesRequired = admin
 
@@ -20,7 +20,7 @@ PrivilegesRequired = admin
 FinishedLabelNoIcons=Setup has finished installing [name].%n%nConsider adding your IP address and trusted subnets to the whitelist (%program files%\EZWinBan\config\whitelist.txt) prior to enabling EZWinBan.
 
 [Files]
-Source: "*"; Excludes: "*.iss,\Output"; Flags: recursesubdirs createallsubdirs; DestDir: "{pf}\EZWinBan"
+Source: "*"; Excludes: "*.iss,*.md"; Flags: recursesubdirs createallsubdirs; DestDir: "{pf}\EZWinBan"
 
 [Run]
 ; Disable Network Level Authentication (NLA) for Remote Desktop

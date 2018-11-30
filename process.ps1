@@ -16,10 +16,10 @@ If (!$PSScriptRoot) {
 
 # Read configuration from config\settings.ini
 # See https://stackoverflow.com/questions/43690336/powershell-to-read-single-value-from-simple-ini-file
-$configSettings = Get-Content $PSSCriptRoot'\config\settings.ini' | Select -Skip 4 | ConvertFrom-StringData
+$configSettings = Get-Content $PSSCriptRoot'\config\settings.ini' | Select -Skip 5 | ConvertFrom-StringData
 $lockoutDuration = $configSettings.LOCKOUTDURATION
 $failedLoginThreshold = $configSettings.FAILEDLOGINTHRESHOLD
-$failedLoginThreshold
+$logLookbackInterval = $configSettings.LOGLOOKBACKINTERVAL
 
 # Setup date variables
 $currentDate=[DateTime]::Now
@@ -73,13 +73,16 @@ if($expiredBlocks) {
 }
 
 # Select IP addresses from the Windows Security log that have audit failures (Event Code 4625) within the "look back" date/time range
-$failedLoginIPs=Get-WinEvent -FilterHashtable @{LogName="Security";ID="4625";StartTime=(Get-Date).AddMinutes(-5)} -ErrorAction SilentlyContinue | ForEach { ([xml]$_.ToXml()).Event.EventData.Data[19] } | select-object '#text'
+$failedLoginIPs=Get-WinEvent -FilterHashtable @{LogName="Security";ID="4625";StartTime=(Get-Date).AddMinutes(-$logLookbackInterval)} -ErrorAction SilentlyContinue | ForEach { ([xml]$_.ToXml()).Event.EventData.Data[19] } | select-object '#text'
 
 # Select IP addresses from results above that have more than $failedLoginThreshold bad logins
 $failedLoginIPsOverThresh = $failedLoginIPs | group-object -property '#text' | where {$_.Count -gt $failedLoginThreshold} | Select -property Name
 
-# Select IPs that are not whitelisted
-$newIPsToBlock = $failedLoginIPsOverThresh | where {$_.Name.Length -gt 1 -and !(Check-Whitelist $_.Name) }
+# Split the existing IPs in the firewall rule into an array so we can search for existing IPs
+$currentBannedIPs = $blockRule.RemoteAddresses -split(',')
+
+# Select IPs that are not whitelisted and not already in the firewall rule scope
+$newIPsToBlock = $failedLoginIPsOverThresh | where {$_.Name.Length -gt 1 -and !(Check-Whitelist $_.Name) -and !($currentBannedIPs -contains $_.Name + '/255.255.255.255') }
 
 # Write the new IPs that need to be blocked into today's work file
 $newIPsToBlock.Name >> "$workPath\$currentWorkFileName"

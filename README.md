@@ -27,7 +27,7 @@ Although EZWinBan is awesome, if you are looking for a more mature and robust ap
      * settings.ini
           * How many DAYS IPs remain banned (LOCKOUTDURATION)
           * How many failed login attempts trigger a ban (FAILEDLOGINTHRESHOLD)
-          * How many MINUTES EZWinBan "looks back" in the event log for failed logins (LOGLOOKBACKINTERVAL) - useful for "slow" attacks where failures do not occur within the 1 minute intervals that EZWinBan runs
+          * How many MINUTES EZWinBan "looks back" in the event log for failed logins (LOGLOOKBACKINTERVAL) - useful for "slow" attacks where login failures do not occur within the 1 minute intervals that EZWinBan runs
      * whitelist.txt
           * Add IP addresses and/or subnets that should never be banned - see comments in the file for formatting
    
@@ -69,14 +69,14 @@ get-content -path $env:programfiles'\EZWinBan\work\*.log' | Get-Unique | measure
 Get-WinEvent -FilterHashtable @{LogName="Security";ID="4625";StartTime=(Get-Date).AddMinutes(-15)} -ErrorAction SilentlyContinue | ForEach { ([xml]$_.ToXml()).Event.EventData.Data[19] } | select-object '#text'
 ```
 
-### Show top /8 subnets blocked in the firewall
+### Show top /8 subnets blocked in the firewall rule
 ```
 $blockedIPs=((New-Object -ComObject hnetcfg.fwpolicy2).rules | where {$_.name -eq 'EZWinBan'}).remoteaddresses -split(',')
 $blockedIPs.split(".",2) | where-object {!($_.contains("."))} | group-object | sort-object
 ```
 
 
-## Limitations and to do
+## Limitations and To Do
 * Banned IP expiry interval is in days only (not hours, minutes, etc.)
 * Banned IP expiry is calendar day based and not based on when IPs are banned. For example, if an IP is banned at 11:59 PM, it could be unbanned at 12:00 AM (technially the next day but only 1 minute later)
 * No history or logging, except the work files (which are deleted as bans expire)

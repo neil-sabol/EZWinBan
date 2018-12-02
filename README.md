@@ -25,11 +25,11 @@ Although EZWinBan is awesome, if you are looking for a more mature and robust ap
 ## Usage (advanced)
 * Additional configuration is possible using the files in %programfiles%\EZWinBan\config
      * settings.ini
-            * How many DAYS IPs remain banned (LOCKOUTDURATION)
-            * How many failed login attempts trigger a ban (FAILEDLOGINTHRESHOLD)
-            * How many MINUTES EZWinBan "looks back" in the event log for failed logins (LOGLOOKBACKINTERVAL) - useful for "slow" attacks where failures do not occur within the 1 minute intervals that EZWinBan runs
+          * How many DAYS IPs remain banned (LOCKOUTDURATION)
+          * How many failed login attempts trigger a ban (FAILEDLOGINTHRESHOLD)
+          * How many MINUTES EZWinBan "looks back" in the event log for failed logins (LOGLOOKBACKINTERVAL) - useful for "slow" attacks where failures do not occur within the 1 minute intervals that EZWinBan runs
      * whitelist.txt
-            * Add IP addresses and/or subnets that should never be banned - see comments in the file for formatting
+          * Add IP addresses and/or subnets that should never be banned - see comments in the file for formatting
    
 * EZWinBan runs every 1 minute by default (via Scheduled Task) - wait ~1 minute and check %programfiles%\EZWinBan\work and you should see a "work file" created and named after the current date. That indicates that EZWinBan is being executed properly. If you open Windows Firewall and access the rule called "EZWinBan," you should see IP addresses under the Scope tab that match those written to the work file.
 

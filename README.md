@@ -19,7 +19,7 @@ Although EZWinBan is awesome, if you are looking for a more mature and robust ap
 
 
 ## Usage (basic)
-* Download and run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/1.0.0/EZWinBan-Install.exe) - this creates a EZWinBan folder in %programfiles%, a firewall rule that EZWinBan will manipulate, and a Scheduled Task that runs EZWinBan (process.ps1).
+* Download and run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/1.1.0/EZWinBan-Install.exe) - this creates a EZWinBan folder in %programfiles%, a firewall rule that EZWinBan will manipulate, and a Scheduled Task that runs EZWinBan (process.ps1).
 
 
 ## Usage (advanced)

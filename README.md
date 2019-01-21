@@ -9,7 +9,7 @@ Although EZWinBan is awesome, if you are looking for a more mature and robust ap
 
 
 ## Features
-* Easy to get started - run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/1.1.0/EZWinBan-Install.exe) and begin banning problematic IPs in seconds
+* Easy to get started - run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/v1.3.0/EZWinBan-Install.exe) and begin banning problematic IPs in seconds
 * Works on Windows Server 2008+
 * Automatically ban IPs that repeatedly fail to login to various Microsoft services (anything that logs EventCode 4625 to the "Security" log upon login failure) - examples include: IIS virtual SMTP server, Remote Desktop Services (RDS/RDP), SMB/CIFS, etc.
 * Configurable settings: ban time (how long IPs remain banned), number of authentication failures resulting in a ban, time span (interval) to "look back" for failed logins in the event log
@@ -19,7 +19,7 @@ Although EZWinBan is awesome, if you are looking for a more mature and robust ap
 
 
 ## Usage (basic)
-* Download and run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/1.1.0/EZWinBan-Install.exe) - this creates a EZWinBan folder in %programfiles%, a firewall rule that EZWinBan will manipulate, and a Scheduled Task that runs EZWinBan (process.ps1).
+* Download and run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/v1.3.0/EZWinBan-Install.exe) - this creates a EZWinBan folder in %programfiles%, a firewall rule that EZWinBan will manipulate, and a Scheduled Task that runs EZWinBan (process.ps1).
 
 
 ## Usage (advanced)

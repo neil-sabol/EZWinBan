@@ -23,12 +23,12 @@ $logLookbackInterval = $configSettings.LOGLOOKBACKINTERVAL
 
 # Setup date variables
 $currentDate=[DateTime]::Now
-$expiryCutoffDate=$currentDate.AddDays(-$lockoutDuration)
+$expiryCutoffDate=$currentDate.AddHours(-$lockoutDuration)
 
 # Setup working path and file variables - the path is "work" and log files are named based
 # on the current date
 $workPath=$PSSCriptRoot+'\work'
-$currentWorkFileName=$currentDate.ToString('yyyyMMdd')+'.log'
+$currentWorkFileName=$currentDate.ToString('yyyyMMddHH')+'.log'
 
 # Setup Windows Firewall object - used later to add new scope to an existing rule
 $winFirewall = New-Object -ComObject hnetcfg.fwpolicy2

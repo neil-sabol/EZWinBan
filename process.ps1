@@ -57,7 +57,7 @@ function Check-Whitelist {
 # Script
 #########################
 # Check for expired work files, remove them (if found), and rebuild the firewall rule with only the current blocks 
-# (only runs once per day, when the expired work file is identified and removed)
+# (runs once per hour at most, when expired work files are identified and removed)
 $expiredBlocks=Get-ChildItem $workPath | Where-Object { $_.Name -like '*.log' } | Where-Object { $_.CreationTime -lt $expiryCutoffDate }
 if($expiredBlocks) {
     # Delete files containing blocked IPs that are past the cutoff

@@ -25,13 +25,13 @@ Although EZWinBan is awesome, if you are looking for a more mature and robust ap
 ## Usage (advanced)
 * Additional configuration is possible using the files in %programfiles%\EZWinBan\config
      * settings.ini
-          * How many DAYS IPs remain banned (LOCKOUTDURATION)
+          * How many HOURS IPs remain banned (LOCKOUTDURATION)
           * How many failed login attempts trigger a ban (FAILEDLOGINTHRESHOLD)
           * How many MINUTES EZWinBan "looks back" in the event log for failed logins (LOGLOOKBACKINTERVAL) - useful for "slow" attacks where login failures do not occur within the 1 minute intervals that EZWinBan runs
      * whitelist.txt
           * Add IP addresses and/or subnets that should never be banned - see comments in the file for formatting
    
-* EZWinBan runs every 1 minute by default (via Scheduled Task) - wait ~1 minute and check %programfiles%\EZWinBan\work and you should see a "work file" created and named after the current date. That indicates that EZWinBan is being executed properly. If you open Windows Firewall and access the rule called "EZWinBan," you should see IP addresses under the Scope tab that match those written to the work file.
+* EZWinBan runs every 1 minute by default (via Scheduled Task) - wait ~1 minute and check %programfiles%\EZWinBan\work and you should see a "work file" created and named after the current date and time. That indicates that EZWinBan is being executed properly. If you open Windows Firewall and access the rule called "EZWinBan," you should see IP addresses under the Scope tab that match those written to the work file.
 
 * To remove EZWinBan, simply uninstall it from Apps or Programs and Features.
 
@@ -77,8 +77,7 @@ $blockedIPs.split(".",2) | where-object {!($_.contains("."))} | group-object | s
 
 
 ## Limitations and To Do
-* Banned IP expiry interval is in days only (not hours, minutes, etc.)
-* Banned IP expiry is calendar day based and not based on when IPs are banned. For example, if an IP is banned at 11:59 PM, it could be unbanned at 12:00 AM (technially the next day but only 1 minute later)
+* The banned IP expiry interval is in hours (not minutes, etc.) - the minimum amount of time an IP can be banned is 1 hour. If you need to ban IPs for days, you must provide the value in hours ( days * 24 )
 * No history or logging, except the work files (which are deleted as bans expire)
 
 

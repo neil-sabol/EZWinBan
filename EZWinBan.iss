@@ -1,8 +1,8 @@
 [Setup]
 AppName = EZWinBan
-AppVerName = EZWinBan 1.1
+AppVerName = EZWinBan 1.3
 AppPublisher = Neil Sabol and others
-AppVersion = 1.1
+AppVersion = 1.3
 DefaultDirName = {pf}\EZWinBan
 ; Place the generated installer on the current user's desktop
 OutputDir=userdocs:..\Desktop

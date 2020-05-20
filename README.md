@@ -84,7 +84,6 @@ $blockedIPs.split(".",2) | where-object {!($_.contains("."))} | group-object | s
 * The tracking of banned IPs needs to be improved so they are unbanned (expire) predictably and consistently
 * The work file expiry interval should be made configurable (instead of 15 minutes hard-coded)
 * Logging needs to be improved, for example: log whitelisted IPs with failed logins, log major errors/issues, implement different logging levels like DEBUG, INFO, ERROR
-* The uninstaller needs fixed so that the EZWinBan directory (under Program Files), work directory and child files are removed during uninstall
 
 
 ## Acknowledgements

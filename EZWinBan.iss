@@ -1,8 +1,8 @@
 [Setup]
 AppName = EZWinBan
-AppVerName = EZWinBan 2.0
+AppVerName = EZWinBan 2.1
 AppPublisher = Neil Sabol and others
-AppVersion = 2.0
+AppVersion = 2.1
 DefaultDirName = {pf}\EZWinBan
 ; Place the generated installer on the current user's desktop
 OutputDir=userdocs:..\Desktop
@@ -36,11 +36,13 @@ Filename: "auditpol.exe"; Parameters: "/set /category:""Logon/Logoff"" /success:
 Filename: "auditpol.exe"; Parameters: "/set /category:""Account Logon"" /success:enable /failure:enable"; Flags: shellexec waituntilterminated runhidden; StatusMsg: Configuring logging
 
 [UninstallRun]
-; Remove the scheduled task using powershell
+; Remove the scheduled task
 Filename: "powershell.exe"; Parameters: "-ExecutionPolicy ByPass -Command ""Unregister-ScheduledTask -Confirm:$false -TaskName ""EZWinBan"""""; Flags: shellexec waituntilterminated runhidden; StatusMsg: Removing scheduled task
-; Kill the Powershell process running EZWinBan - need a better way to handle this at some point
-Filename: "powershell.exe"; Parameters: "-ExecutionPolicy ByPass -Command ""Get-Process -Id $(Get-Content C:\PROGRA~1\EZWinBan\work\pid) | Stop-Process -Force"""; Flags: shellexec waituntilterminated runhidden; StatusMsg: Stopping EZWinBan PowerShell process
+; Kill the PowerShell process running EZWinBan
+Filename: "powershell.exe"; Parameters: "-ExecutionPolicy ByPass -Command ""Get-Process -Id $(Get-Content '{pf}\EZWinBan\work\pid') | Stop-Process -Force"""; Flags: shellexec waituntilterminated runhidden; StatusMsg: Stopping EZWinBan PowerShell process
 ; Remove the Windows Event Log
 Filename: "powershell.exe"; Parameters: "-ExecutionPolicy ByPass -Command ""Remove-EventLog -Source ""EZWinBan"""; Flags: shellexec waituntilterminated runhidden; StatusMsg: Removing Event Log
 ; Remove the firewall rule
 Filename: "netsh.exe"; Parameters: "advfirewall firewall delete rule name=""EZWinBan"""; Flags: shellexec waituntilterminated runhidden; StatusMsg: Removing firewall rule
+; Remove remaining folder in Program Files (includes leftover pid and work files)
+Filename: "powershell.exe"; Parameters: "-ExecutionPolicy ByPass -Command ""sleep 15;Remove-Item -Path '{pf}\EZWinBan' -Recurse -Force"""; Flags: shellexec runhidden; StatusMsg: Removing remaining pid and work files

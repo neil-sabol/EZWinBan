@@ -81,6 +81,8 @@ $blockedIPs.split(".",2) | where-object {!($_.contains("."))} | group-object | s
 
 ## Limitations, issues and "to do"
 * The banned IP expiry interval is in hours (not minutes, etc.) - the minimum amount of time an IP can be banned is 1 hour. To ban IPs for days, provide the value in hours ( days * 24 )
+* Add logic to parse EventCode 131 and 140 for Windows Server 2012 (EventCode 4625 does not appear to contain the source IP, even with NLA disabled) - thank you Hiền Phạm for the idea / suggestion
+* Add tiered bans (i.e. first ban duration X time, second ban duration Y time, etc.) - thank you Hiền Phạm for the idea / suggestion
 * The tracking of banned IPs needs to be improved so they are unbanned (expire) predictably and consistently
 * The work file expiry interval should be made configurable (instead of 15 minutes hard-coded)
 * Logging needs to be improved, for example: log whitelisted IPs with failed logins, log major errors/issues, implement different logging levels like DEBUG, INFO, ERROR

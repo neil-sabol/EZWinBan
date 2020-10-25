@@ -1,5 +1,5 @@
 # EZWinBan
-EZWinBan builds on and automates [Nathan Studebaker's](https://blog.watchpointdata.com/author/nathan-studebaker) [brute force attack detection and blacklisting on Windows Server with PowerShell script](https://blog.watchpointdata.com/rdp-brute-force-attack-detection-and-blacklisting-with-powershell). The functionality is similar to [Fail2Ban](https://www.fail2ban.org/wiki/index.php/Main_Page) or [DenyHosts](https://github.com/denyhosts/denyhosts), but for Microsoft Windows.
+EZWinBan builds on and automates [Chris Hartwig's](https://blog.getcryptostopper.com/author/chris-hartwig) [RDP Brute Force Attack Detection and Blacklisting with Powershell](https://blog.getcryptostopper.com/rdp-brute-force-attack-detection-and-blacklisting-with-powershell). The functionality is similar to [Fail2Ban](https://www.fail2ban.org/wiki/index.php/Main_Page) or [DenyHosts](https://github.com/denyhosts/denyhosts), but for Microsoft Windows.
 
 **Although EZWinBan is neat, if you are looking for a more mature and robust approach to IP banning on Windows, [IPBan](https://github.com/DigitalRuby/IPBan) is worth a look.**
 
@@ -83,7 +83,7 @@ Get-WinEvent -FilterHashtable @{LogName="Security";ID="4625";StartTime=(Get-Date
 
 
 ## Acknowledgments
-[Nathan Studebaker](https://blog.watchpointdata.com/author/nathan-studebaker): [RDP Brute Force Attack Detection and Blacklisting with Powershell](https://blog.watchpointdata.com/rdp-brute-force-attack-detection-and-blacklisting-with-powershell) - Genius approach and implementation to Powershell-based event log (EventCode 4740) analysis and lockout (Windows firewall).
+[Nathan Studebaker](https://blog.watchpointdata.com/author/nathan-studebaker) and [Chris Hartwig](https://blog.getcryptostopper.com/author/chris-hartwig): [RDP Brute Force Attack Detection and Blacklisting with Powershell](https://blog.getcryptostopper.com/rdp-brute-force-attack-detection-and-blacklisting-with-powershell) - Genius approach and implementation to Powershell-based event log (EventCode 4740) analysis and lockout (Windows firewall).
 
 [Joel Sallow](https://www.reddit.com/user/Ta11ow/): [Check a list of IP's against a list of subnets](https://www.reddit.com/r/PowerShell/comments/8u14wl/check_a_list_of_ips_against_a_list_of_subnets/) - quick and easy IP/subnet comparison code (Powershell).
 

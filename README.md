@@ -75,7 +75,7 @@ Get-WinEvent -FilterHashtable @{LogName="Security";ID="4625";StartTime=(Get-Date
 
 ## Limitations, issues, and "to do"
 * The banned IP expiry interval is in hours (not minutes, etc.) - the minimum amount of time an IP can be banned is 1 hour. To ban IPs for days, provide the value in hours ( days * 24 )
-* Add logic to parse EventCode 131 and 140 for Windows Server 2012 (EventCode 4625 does not appear to contain the source IP, even with NLA disabled) - thanks to Hiền Phạm for the idea/suggestion
+* Add logic to parse EventCode 140 from *Microsoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational* for Windows Server 2012 (EventCode 4625 does not a contain the source IP, even with NLA disabled); this should also allow RDP banning with NLA enabled on all Windows Server versions - thanks to Hiền Phạm for the idea/suggestion
 * Add tiered bans (i.e. first ban duration X time, second ban duration Y time, etc.) - thanks to Hiền Phạm for the idea/suggestion
 * The tracking of banned IPs needs to be improved so they are unbanned more predictably
 * The work file expiry interval should be made configurable (instead of 15 minutes hard-coded)

@@ -9,7 +9,7 @@ EZWinBan is a Powershell script, triggered via Scheduled Task, that runs in a lo
 
 
 ## Features
-* Easy to get started - run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/3.0.0/EZWinBan-Install.exe) and begin banning problematic IPs in seconds
+* Easy to get started - run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/v3.0.0/EZWinBan-Install.exe) and begin banning problematic IPs in seconds
 * Based on Windows native components like PowerShell, Windows Firewall, and Task Scheduler
 * Works on Windows Server 2012+ AND handles RDP banning even though Server 2012 (not R2) DOES NOT log source IPs in Event ID 4625 for RDP (even with NLA disabled)
 * Automatically ban IPs that repeatedly fail to log in to various Microsoft services (anything that logs EventCode 4625 to the "Security" log upon login failure) - examples include IIS virtual SMTP server, Remote Desktop Services (RDS/RDP), SMB/CIFS, etc.
@@ -20,7 +20,7 @@ EZWinBan is a Powershell script, triggered via Scheduled Task, that runs in a lo
 
 
 ## Usage (basic)
-* Download and run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/2.1.0/EZWinBan-Install.exe) - this creates an *EZWinBan* folder in %programfiles%, a firewall rule that EZWinBan will manipulate, and a Scheduled Task that ensures EZWinBan (process.ps1) is running.
+* Download and run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/v3.0.0/EZWinBan-Install.exe) - this creates an *EZWinBan* folder in %programfiles%, a firewall rule that EZWinBan will manipulate, and a Scheduled Task that ensures EZWinBan (process.ps1) is running.
 
 
 ## Usage (advanced)
@@ -47,6 +47,7 @@ EZWinBan is a Powershell script, triggered via Scheduled Task, that runs in a lo
 
 ## Useful diagnostic commands
 ### Reset EZWinBan (stop the running process, un-ban banned IPs and clear the Event Log)
+In some scenarios, the firewall rule and event log may become "out of sync," which results in old banned IPs getting stuck in the firewall rule. These commands clear up that issue if it occurs.
 ```
 Get-Process -Id $(Get-Content "$env:programfiles\EZWinBan\pid") | Stop-Process -Force
 $winFirewall = New-Object -ComObject hnetcfg.fwpolicy2

@@ -100,6 +100,8 @@ Get-WinEvent -FilterHashtable @{LogName="Microsoft-Windows-RemoteDesktopServices
 ## Limitations, issues, and "to do"
 * The banned IP expiry interval is in minutes - the minimum amount of time an IP can be banned is 1 minute. To ban IPs for hours, days, etc. provide the value in minutes (examples: to ban IPs for 2 hours, set **LOCKOUTDURATION** to 120 (60 minutes per hour * 2 hours), to ban IPs for 5 days, set **LOCKOUTDURATION** to 7200 (1440 minutes per day * 5 days) )
 * Add tiered bans (i.e. first ban duration X time, second ban duration Y time, etc.) - thanks to Hiền Phạm for the idea/suggestion
+* Add a mechanism to share data (bad IPs) between EZWinBan installations on different servers (honeypot model) - thanks to Hiền Phạm for the idea/suggestion
+* Better handling (or prevention) of scenarios where the firewall rule and event log become "out of sync," resulting in old banned IPs getting stuck in the firewall rule
 
 
 ## Acknowledgments

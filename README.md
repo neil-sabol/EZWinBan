@@ -107,7 +107,7 @@ Get-WinEvent -FilterHashtable @{LogName="Microsoft-Windows-RemoteDesktopServices
 To run the tests, you will need:
 
 * Pester 5+: `Install-Module -Name Pester -Force -SkipPublisherCheck`
-* [Inno Setup 6+](https://jrsoftware.org/isdl.php), with console-mode compiler installed to * ${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe*
+* [Inno Setup 6+](https://jrsoftware.org/isdl.php), with console-mode compiler installed to *${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe*
 
 Once the prerequisites are installed, the Pester tests can be invoked as follows (note: these steps must be performed in an elevated/administrator PowerShell session):
 

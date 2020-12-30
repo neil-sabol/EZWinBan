@@ -33,7 +33,7 @@ if (!$PSScriptRoot) {
 }
 
 # Specify an application version
-$appVer = "3.0"
+$appVer = "3.1"
 
 # Setup the working path prefix directory
 $workPath=$PSSCriptRoot
@@ -82,7 +82,7 @@ while ($true) {
     #########################
     # Execution
     #########################
-    # Check for expired bans, remove them (if found), and rebuild the firewall rule with only the current banned IPs. 
+    # Log expired bans and rebuild the firewall rule with only the current banned IPs. 
     # Runs on the UNBANINTERVAL specified in settings.ini (minutes).
     if($((New-TimeSpan -Start $lastRun -End $currentDate).Minutes) -ge $unBanInterval) {
         [int]$expiredBanOffset = [int]$lockoutDuration + [int](New-TimeSpan -Start $lastRun -End $currentDate).Minutes
@@ -91,14 +91,14 @@ while ($true) {
         if(@($expiredIPs).Count -gt 0) {
             # Log expired (unbanned) IPs - Source: EZWinBan, EventID 101
             $expiredIPs | %{ Write-EventLog –LogName "EZWinBan" –Source "EZWinBan" –EntryType Information –EventID 101 –Message "Unbanned $_" }
-    
-            # Collect all remaining unique IPs that should remain blocked from the EZWinBan Event Log
-            $allIPsToBlock=Get-WinEvent -FilterHashtable @{LogName="EZWinBan";ID="100";StartTime=$expiryCutoffDate} -ErrorAction SilentlyContinue | ForEach { ([xml]$_.ToXml()).Event.EventData.Data.Replace("Banned ","") } | Get-Unique
-    
-            # Rebuild the firewall rule scope with all current addresses (and a placeholder address 255.255.255.254/255.255.255.255).
-            $blockRule.remoteaddresses='255.255.255.254/255.255.255.255';
-            $allIPsToBlock | %{ $blockRule.remoteaddresses += ',' + $_ }
         }
+
+        # Collect all remaining unique IPs that should remain blocked from the EZWinBan Event Log
+        $allIPsToBlock=Get-WinEvent -FilterHashtable @{LogName="EZWinBan";ID="100";StartTime=$expiryCutoffDate} -ErrorAction SilentlyContinue | ForEach { ([xml]$_.ToXml()).Event.EventData.Data.Replace("Banned ","") } | Get-Unique
+    
+        # Rebuild the firewall rule with all current addresses (and a placeholder address 255.255.255.254/255.255.255.255).
+        $blockRule.remoteaddresses='255.255.255.254/255.255.255.255';
+        $allIPsToBlock | %{ $blockRule.remoteaddresses += ',' + $_ }
 
         # Update the last expiry run date/time in the persistent file
         $lastRun = Get-Date
@@ -107,18 +107,18 @@ while ($true) {
 
     # Select IP addresses from the Windows Security log that have audit failures (Event Code 4625) within the
     # "look back" date/time range.
-    $failedLoginIPs=Get-WinEvent -FilterHashtable @{LogName="Security";ID="4625";StartTime=(Get-Date).AddMinutes(-$logLookbackInterval)} -ErrorAction SilentlyContinue | ForEach { ([xml]$_.ToXml()).Event.EventData.Data[19] } | select-object '#text'
+    $failedLoginIPs=Get-WinEvent -FilterHashtable @{LogName="Security";ID="4625";StartTime=(Get-Date).AddMinutes(-$logLookbackInterval)} -ErrorAction SilentlyContinue | ForEach { ([xml]$_.ToXml()).Event.EventData.Data[19] } | Select-Object -ExpandProperty "#text"
 
     # Windows Server 2012 DOES NOT log source IPs in Event ID 4625 for RDP (even with NLA disabled) but it DOES log RDP
     # auth failures with EventCode 140 to Microsoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational.
     if($osVersion -like "*Windows Server 2012*" -and $osVersion -notlike "*Windows Server 2012 R2*" ) {
         # Select IP addresses from the Microsoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational log that have login
         # failures (Event Code 140) within the "look back" date/time range and append them to the list
-        $failedLoginIPs+=Get-WinEvent -FilterHashtable @{LogName="Microsoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational";ID="140";StartTime=(Get-Date).AddMinutes(-$logLookbackInterval)} -ErrorAction SilentlyContinue | ForEach { ([xml]$_.ToXml()).Event.EventData.Data } | select-object '#text'
+        $failedLoginIPs+=Get-WinEvent -FilterHashtable @{LogName="Microsoft-Windows-RemoteDesktopServices-RdpCoreTS/Operational";ID="140";StartTime=(Get-Date).AddMinutes(-$logLookbackInterval)} -ErrorAction SilentlyContinue | ForEach { ([xml]$_.ToXml()).Event.EventData.Data } | Select-Object -ExpandProperty "#text"
     } 
         
     # Select IP addresses from the results that have $failedLoginThreshold or more bad logins.
-    $failedLoginIPsOverThresh = $failedLoginIPs | group-object -property '#text' | where {$_.Count -ge $failedLoginThreshold} | Select -property Name
+    $failedLoginIPsOverThresh = $failedLoginIPs | group-object | where {$_.Count -ge $failedLoginThreshold} | Select -property Name
 
     # Split the existing IPs in the firewall rule into an array so we can search for existing IPs.
     $currentBannedIPs = $blockRule.RemoteAddresses -split(',')

@@ -3,13 +3,13 @@ EZWinBan builds on and automates [Chris Hartwig's](https://blog.getcryptostopper
 
 **Although EZWinBan is neat, if you are looking for a more mature and robust approach to IP banning on Windows, [IPBan](https://github.com/DigitalRuby/IPBan) is worth a look.**
 
-The driver behind enhancing Chris and Nathan's script (and building an easy to use installer with [InnoSetup](http://www.jrsoftware.org/isinfo.php)) is preventing AD account lockouts (EventCode 4740) due to brute force or purposeful denial of service attacks against known AD accounts. EZWinBan is relatively effective at this task.
+The driver behind enhancing Chris and Nathan's script (and building an easy to use installer with [Inno Setup](http://www.jrsoftware.org/isinfo.php)) is preventing AD account lockouts (EventCode 4740) due to brute force or purposeful denial of service attacks against known AD accounts. EZWinBan is relatively effective at this task.
 
 EZWinBan is a Powershell script, triggered via Scheduled Task, that runs in a loop. It parses events (code 4625) from the Windows "Security" log on a user-configurable interval (seconds), extracts the IP address from each event, counts the number of login failures from each IP, notes any that are over the threshold, checks IPs against the whitelist, and adds offending IP addresses to the scope of a Windows firewall rule. History and expiry are maintained in a custom Windows Event Log called "EZWinBan." On a user-configurable interval (in minutes), IPs whose bans have expired are removed (based on the contents of the EZWinBan Event Log).
 
 
 ## Features
-* Easy to get started - run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/v3.0.0/EZWinBan-Install.exe) and begin banning problematic IPs in seconds
+* Easy to get started - run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/v3.1.0/EZWinBan-Install.exe) and begin banning problematic IPs in seconds
 * Based on Windows native components like PowerShell, Windows Firewall, and Task Scheduler
 * Works on Windows Server 2012+ AND handles RDP banning even though Server 2012 (not R2) DOES NOT log source IPs in Event ID 4625 for RDP (even with NLA disabled)
 * Automatically ban IPs that repeatedly fail to log in to various Microsoft services (anything that logs EventCode 4625 to the "Security" log upon login failure) - examples include IIS virtual SMTP server, Remote Desktop Services (RDS/RDP), SMB/CIFS, etc.
@@ -20,7 +20,7 @@ EZWinBan is a Powershell script, triggered via Scheduled Task, that runs in a lo
 
 
 ## Usage (basic)
-* Download and run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/v3.0.0/EZWinBan-Install.exe) - this creates an *EZWinBan* folder in %programfiles%, a firewall rule that EZWinBan will manipulate, and a Scheduled Task that ensures EZWinBan (process.ps1) is running.
+* Download and run the [installer](https://github.com/neil-sabol/EZWinBan/releases/download/v3.1.0/EZWinBan-Install.exe) - this creates an *EZWinBan* folder in %programfiles%, a firewall rule that EZWinBan will manipulate, and a Scheduled Task that ensures EZWinBan (process.ps1) is running.
 
 
 ## Usage (advanced)
@@ -47,7 +47,6 @@ EZWinBan is a Powershell script, triggered via Scheduled Task, that runs in a lo
 
 ## Useful diagnostic commands
 ### Reset EZWinBan (stop the running process, un-ban banned IPs and clear the Event Log)
-In some scenarios, the firewall rule and event log may become "out of sync," which results in old banned IPs getting stuck in the firewall rule. These commands clear up that issue if it occurs.
 ```
 Get-Process -Id $(Get-Content "$env:programfiles\EZWinBan\pid") | Stop-Process -Force
 $winFirewall = New-Object -ComObject hnetcfg.fwpolicy2
@@ -99,9 +98,25 @@ Get-WinEvent -FilterHashtable @{LogName="Microsoft-Windows-RemoteDesktopServices
 
 ## Limitations, issues, and "to do"
 * The banned IP expiry interval is in minutes - the minimum amount of time an IP can be banned is 1 minute. To ban IPs for hours, days, etc. provide the value in minutes (examples: to ban IPs for 2 hours, set **LOCKOUTDURATION** to 120 (60 minutes per hour * 2 hours), to ban IPs for 5 days, set **LOCKOUTDURATION** to 7200 (1440 minutes per day * 5 days) )
-* Integration testing with [Pester](https://github.com/pester/Pester)
 * Add incrementally longer bans (i.e. first ban duration = *LOCKOUTDURATION*, second ban duration = 2 x *LOCKOUTDURATION*, etc.) - thanks to Hiền Phạm for the idea/suggestion
-* Better handling (or prevention) of scenarios where the firewall rule and event log become "out of sync," resulting in old banned IPs getting stuck in the firewall rule
+
+
+## Integration testing
+`EZWinBan.Tests.ps1` contains basic PowerShell [Pester](https://github.com/pester/Pester) tests that I use to validate the functionality of EZWinBan as changes are introduced. These are not unit tests - they are just automation to help save me time. Real test writers will cringe at the monstrosity I created.
+
+To run the tests, you will need:
+
+* Pester 5+: `Install-Module -Name Pester -Force -SkipPublisherCheck`
+* [Inno Setup 6+](https://jrsoftware.org/isdl.php), with console-mode compiler installed to * ${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe*
+
+Once the prerequisites are installed, the Pester tests can be invoked as follows (note: these steps must be performed in an elevated/administrator PowerShell session):
+
+```
+cd <local-path-to-EZWinBan-repository>
+Invoke-Pester -Output Detailed
+```
+
+The tests are not mocked - they build the EZWinBan installer (Inno Setup), execute it silently, and check various conditions and scenarios (using a disabled firewall rule and fake Windows Event logs). Once done, the EZWinBan uninstaller is executed silently and the test artifacts are cleaned up. The test process takes several minutes.
 
 
 ## Acknowledgments
@@ -111,4 +126,4 @@ Get-WinEvent -FilterHashtable @{LogName="Microsoft-Windows-RemoteDesktopServices
 
 [Jordan Russell and Martijn Laan](http://www.jrsoftware.org/isinfo.php): [Inno Setup](http://www.jrsoftware.org/) - Best installer creation tool ever!
 
-Others, as cited inline in *process.ps1*
+Others, as cited inline in *process.ps1* and *EZWinBan.Tests.ps1*

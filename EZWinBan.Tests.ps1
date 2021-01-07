@@ -44,23 +44,23 @@ $script:testLOGLOOKBACKINTERVAL = "5"
 $script:testDELAY = "1"
 $script:testUNBANINTERVAL = "1"
 
-# This should use mocking in Pester (someday), but for now, create fake Event Logs
-# and functions to populate them with fake events that EZWinBan will process. This uses
-# Kevin Holman's ingenious approach:
-# https://kevinholman.com/2016/04/02/writing-events-with-parameters-using-powershell/
-New-EventLog -LogName "FAKESecurity" -Source "FAKESecurity"
-
-function CreateFAKESecurityEvent ($sourceIP) {
-    $id = New-Object System.Diagnostics.EventInstance(4625,1);
-    $evtObject = New-Object System.Diagnostics.EventLog;
-    $evtObject.Log = "FAKESecurity";
-    $evtObject.Source = "FAKESecurity";
-    $evtObject.WriteEvent($id, @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $sourceIP))
-}
-
 # Begin Pester tests
 Describe 'EZWinBan' {
     BeforeAll {
+    # This should use mocking (someday), but for now, create fake Event Logs
+    # and functions to populate them with fake events that EZWinBan will process. This uses
+    # Kevin Holman's ingenious approach:
+    # https://kevinholman.com/2016/04/02/writing-events-with-parameters-using-powershell/
+    New-EventLog -LogName "FAKESecurity" -Source "FAKESecurity"
+
+    function CreateFAKESecurityEvent ($sourceIP) {
+        $id = New-Object System.Diagnostics.EventInstance(4625,1);
+        $evtObject = New-Object System.Diagnostics.EventLog;
+        $evtObject.Log = "FAKESecurity";
+        $evtObject.Source = "FAKESecurity";
+        $evtObject.WriteEvent($id, @("", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", $sourceIP))
+        }
+
         # Backup EZWinBan.iss and update it so the firewall rule is created in a disabled state
         Copy-Item "$currentPath\EZWinBan.iss" -Destination "$currentPath\EZWinBan.iss.bak" -Force
         ((Get-Content -Path "$currentPath\EZWinBan.iss" -Raw) -replace 'enable=yes','enable=no') | Set-Content -Path "$currentPath\EZWinBan.iss"
